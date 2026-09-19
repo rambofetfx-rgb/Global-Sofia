@@ -18,7 +18,7 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Garantir Estrutura Mínima do Android
+      - name: Garantir Estrutura Mínima e AndroidX
         run: |
           # Garante Recursos Visuais
           mkdir -p app/src/main/res/values
@@ -26,10 +26,14 @@ jobs:
           if [ ! -f app/src/main/res/values/colors.xml ]; then echo '<resources><color name="colorPrimary">#00b4d8</color></resources>' > app/src/main/res/values/colors.xml; fi
           if [ ! -f app/src/main/res/values/styles.xml ]; then echo '<resources><style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar"/></resources>' > app/src/main/res/values/styles.xml; fi
           
-          # Garante o Manifest (Obrigatório para o Gradle não falhar)
+          # Garante o Manifest
           if [ ! -f app/src/main/AndroidManifest.xml ]; then
             echo '<?xml version="1.0" encoding="utf-8"?><manifest xmlns:android="http://schemas.android.com/apk/res/android"><application android:allowBackup="true" android:label="@string/app_name" android:theme="@style/AppTheme"></application></manifest>' > app/src/main/AndroidManifest.xml
           fi
+
+          # Habilita o AndroidX no gradle.properties
+          echo "android.useAndroidX=true" >> gradle.properties
+          echo "android.enableJetifier=true" >> gradle.properties
 
           if [ -f "./gradlew" ]; then chmod +x gradlew; fi
 
