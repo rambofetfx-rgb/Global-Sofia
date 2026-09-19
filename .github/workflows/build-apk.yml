@@ -18,27 +18,10 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Configurar local.properties e Licenças do Android SDK
+      - name: Dar permissão ao Gradlew
         run: |
-          # Apontar localização do SDK para o Gradle
-          echo "sdk.dir=$ANDROID_HOME" > local.properties
-          
-          # Injeção de licenças oficiais do SDK
-          mkdir -p $ANDROID_HOME/licenses
-          echo -e "\n24333f8a637bba5ea280048a7a06c582736324b9\n846401f0925f61915a192a201c43a77122fca71b\n7393d2014fb5212347b1e66d341e42a3059800f0" > $ANDROID_HOME/licenses/android-sdk-license
-          echo -e "\nd93543573fe447d51806999664156b4f25612a40" > $ANDROID_HOME/licenses/android-sdk-preview-license
-
-      - name: Garantir Estrutura de Recursos Básica
-        run: |
-          mkdir -p app/src/main/res/values
-          if [ ! -f app/src/main/res/values/strings.xml ]; then
-            echo '<resources><string name="app_name">GlobalAnimes</string></resources>' > app/src/main/res/values/strings.xml
-          fi
-          if [ ! -f app/src/main/res/values/colors.xml ]; then
-            echo '<resources><color name="colorPrimary">#00b4d8</color></resources>' > app/src/main/res/values/colors.xml
-          fi
-          if [ ! -f app/src/main/res/values/styles.xml ]; then
-            echo '<resources><style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar"/></resources>' > app/src/main/res/values/styles.xml
+          if [ -f "./gradlew" ]; then
+            chmod +x gradlew
           fi
 
       - name: Configurar Gradle 8.5
@@ -47,7 +30,12 @@ jobs:
           gradle-version: '8.5'
 
       - name: Compilar APK Debug
-        run: gradle assembleDebug --stacktrace
+        run: |
+          if [ -f "./gradlew" ]; then
+            ./gradlew assembleDebug --stacktrace
+          else
+            gradle assembleDebug --stacktrace
+          fi
 
       - name: Disponibilizar APK para Descarregar
         uses: actions/upload-artifact@v4
