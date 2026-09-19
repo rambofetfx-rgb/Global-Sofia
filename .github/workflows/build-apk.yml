@@ -18,11 +18,13 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Aceitar Licenças do Android SDK
+      - name: Aprovar Licenças do Android SDK
         run: |
-          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
+          mkdir -p $ANDROID_HOME/licenses
+          echo -e "\n24333f8a637bba5ea280048a7a06c582736324b9\n846401f0925f61915a192a201c43a77122fca71b\n7393d2014fb5212347b1e66d341e42a3059800f0" > $ANDROID_HOME/licenses/android-sdk-license
+          echo -e "\nd93543573fe447d51806999664156b4f25612a40" > $ANDROID_HOME/licenses/android-sdk-preview-license
 
-      - name: Garantir pasta de recursos (res/values)
+      - name: Garantir Estrutura de Recursos Básica
         run: |
           mkdir -p app/src/main/res/values
           if [ ! -f app/src/main/res/values/strings.xml ]; then
