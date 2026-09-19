@@ -13,23 +13,23 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Configurar Java 17
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Aprovar Licenças do Android SDK
+      - name: Configurar Licenças e Recursos do Android
         run: |
+          # Injeção de licenças oficiais do SDK
           mkdir -p $ANDROID_HOME/licenses
           echo -e "\n24333f8a637bba5ea280048a7a06c582736324b9\n846401f0925f61915a192a201c43a77122fca71b\n7393d2014fb5212347b1e66d341e42a3059800f0" > $ANDROID_HOME/licenses/android-sdk-license
           echo -e "\nd93543573fe447d51806999664156b4f25612a40" > $ANDROID_HOME/licenses/android-sdk-preview-license
 
-      - name: Garantir Estrutura de Recursos Básica
-        run: |
+          # Geração automática dos recursos obrigatórios (AAPT2)
           mkdir -p app/src/main/res/values
-          if [ ! -f app/src/main/res/values/strings.xml ]; then
-            echo '<resources><string name="app_name">GlobalAnimes</string></resources>' > app/src/main/res/values/strings.xml
-          fi
+          echo '<resources><string name="app_name">GlobalAnimes</string></resources>' > app/src/main/res/values/strings.xml
+          echo '<resources><color name="colorPrimary">#00b4d8</color></resources>' > app/src/main/res/values/colors.xml
+          echo '<resources><style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar"/></resources>' > app/src/main/res/values/styles.xml
 
       - name: Configurar Gradle 8.5
         uses: gradle/actions/setup-gradle@v4
@@ -37,7 +37,7 @@ jobs:
           gradle-version: '8.5'
 
       - name: Compilar APK Debug
-        run: gradle assembleDebug --stacktrace
+        run: gradle assembleDebug
 
       - name: Disponibilizar APK para Descarregar
         uses: actions/upload-artifact@v4
