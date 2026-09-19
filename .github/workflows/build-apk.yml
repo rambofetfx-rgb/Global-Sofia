@@ -18,25 +18,44 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Dar permissão ao Gradlew
+      - name: Garantir Estrutura Mínima do Android
         run: |
-          if [ -f "./gradlew" ]; then
-            chmod +x gradlew
+          # Garante Recursos Visuais
+          mkdir -p app/src/main/res/values
+          if [ ! -f app/src/main/res/values/strings.xml ]; then echo '<resources><string name="app_name">GlobalAnimes</string></resources>' > app/src/main/res/values/strings.xml; fi
+          if [ ! -f app/src/main/res/values/colors.xml ]; then echo '<resources><color name="colorPrimary">#00b4d8</color></resources>' > app/src/main/res/values/colors.xml; fi
+          if [ ! -f app/src/main/res/values/styles.xml ]; then echo '<resources><style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar"/></resources>' > app/src/main/res/values/styles.xml; fi
+          
+          # Garante o Manifest (Obrigatório para o Gradle não falhar)
+          if [ ! -f app/src/main/AndroidManifest.xml ]; then
+            echo '<?xml version="1.0" encoding="utf-8"?><manifest xmlns:android="http://schemas.android.com/apk/res/android"><application android:allowBackup="true" android:label="@string/app_name" android:theme="@style/AppTheme"></application></manifest>' > app/src/main/AndroidManifest.xml
           fi
 
-      - name: Configurar Gradle (Cache Desativado)
+          if [ -f "./gradlew" ]; then chmod +x gradlew; fi
+
+      - name: Configurar Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.5'
-          cache-disabled: true   # Ignora o cache antigo para evitar erros fantasmas
+          cache-disabled: true
 
-      - name: Limpeza Profunda e Compilação
+      - name: Compilar APK (Filtro para Mobile)
         run: |
-          echo "Iniciando limpeza e compilação..."
+          # Executa o build silenciosamente. Se falhar, captura apenas a causa do erro.
           if [ -f "./gradlew" ]; then
-            ./gradlew clean assembleDebug --info
+            ./gradlew clean assembleDebug > build_log.txt 2>&1 || FAILED=true
           else
-            gradle clean assembleDebug --info
+            gradle clean assembleDebug > build_log.txt 2>&1 || FAILED=true
+          fi
+          
+          if [ "$FAILED" = "true" ]; then
+            echo "❌ FALHA NA COMPILAÇÃO. Resumo do Erro:"
+            echo "----------------------------------------"
+            grep -B 3 -A 15 "FAILED" build_log.txt || tail -n 25 build_log.txt
+            echo "----------------------------------------"
+            exit 1
+          else
+            echo "✅ Compilação concluída com sucesso!"
           fi
 
       - name: Disponibilizar APK para Descarregar
