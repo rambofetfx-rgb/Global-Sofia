@@ -18,11 +18,11 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Configurar Android SDK
-        uses: android-actions/setup-android@v3
-
-      - name: Aceitar Licenças do Android SDK
-        run: yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
+      - name: Aprovar Licenças do Android SDK
+        run: |
+          mkdir -p $ANDROID_HOME/licenses
+          echo -e "\n24333f8a637bba5ea280048a7a06c582736324b9\n846401f0925f61915a192a201c43a77122fca71b\n7393d2014fb5212347b1e66d341e42a3059800f0" > $ANDROID_HOME/licenses/android-sdk-license
+          echo -e "\nd93543573fe447d51806999664156b4f25612a40" > $ANDROID_HOME/licenses/android-sdk-preview-license
 
       - name: Configurar Gradle 8.5
         uses: gradle/actions/setup-gradle@v4
@@ -30,7 +30,7 @@ jobs:
           gradle-version: '8.5'
 
       - name: Compilar APK Debug
-        run: gradle assembleDebug --stacktrace
+        run: gradle assembleDebug
 
       - name: Disponibilizar APK para Descarregar
         uses: actions/upload-artifact@v4
