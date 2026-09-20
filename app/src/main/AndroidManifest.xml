@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.anime.player"> <!-- Baseado no nome do seu pacote -->
+    package="com.anime.player">
 
-    <!-- Permissões de Internet necessárias para carregar os vídeos -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
@@ -12,6 +11,7 @@
         android:label="GlobalAnimes"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
 
+        <!-- Tela Principal (O seu WebView com o site HTML) -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -21,6 +21,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- NOVA TELA: Player Nativo (Oculta a barra e força a tela deitada) -->
+        <activity 
+            android:name=".PlayerActivity"
+            android:exported="false"
+            android:screenOrientation="sensorLandscape"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
 
     </application>
 </manifest>
