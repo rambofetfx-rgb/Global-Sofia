@@ -1,0 +1,35 @@
+{
+    "titulo": "GlobalAnimes - Lançamentos Automáticos",
+    "ultima_atualizacao": "19/09/2026 22:00:00",
+    "animes": [
+        {
+            "id": "naruto",
+            "nome": "Naruto Classic",
+            "capa": "https://via.placeholder.com/150",
+            "episodios": [
+                {
+                    "numero": 1,
+                    "titulo": "Episódio 01 - O Início",
+                    "url": "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
+                },
+                {
+                    "numero": 2,
+                    "titulo": "Episódio 02 - Konohamaru!",
+                    "url": "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
+                }
+            ]
+        },
+        {
+            "id": "one-piece",
+            "nome": "One Piece",
+            "capa": "https://via.placeholder.com/150",
+            "episodios": [
+                {
+                    "numero": 1,
+                    "titulo": "Episódio 01 - Eu sou o Luffy!",
+                    "url": "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
+                }
+            ]
+        }
+    ]
+}
