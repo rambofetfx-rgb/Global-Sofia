@@ -5,76 +5,57 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catálogo GlobalAnimes</title>
     <style>
-        body { 
-            background-color: #121212; 
-            color: #fff; 
-            font-family: sans-serif; 
-            text-align: center; 
-            padding: 50px; 
-            margin: 0;
-        }
-        h1 {
-            font-size: 24px;
-            margin-bottom: 10px;
-        }
-        p {
-            color: #b3b3b3;
-            margin-bottom: 30px;
-        }
-        button { 
-            background-color: #e50914; 
-            color: white; 
-            border: none; 
-            padding: 15px 30px; 
-            font-size: 18px; 
-            border-radius: 5px; 
-            cursor: pointer; 
-            transition: background-color 0.2s;
-        }
-        button:hover {
-            background-color: #b20710;
-        }
+        body { background-color: #121212; color: #fff; font-family: sans-serif; text-align: center; padding: 50px; margin: 0; }
+        h1 { font-size: 24px; margin-bottom: 10px; }
+        p { color: #b3b3b3; margin-bottom: 30px; }
+        button { background-color: #e50914; color: white; border: none; padding: 15px 30px; font-size: 16px; border-radius: 5px; cursor: pointer; margin: 10px; width: 80%; max-width: 300px;}
+        .btn-teste { background-color: #007bff; }
     </style>
 </head>
 <body>
 
     <h1>Naruto - Episódio 1</h1>
-    <p>Clique abaixo para extrair o link e testar o player nativo.</p>
-    <button onclick="assistirEpisodio('naruto-episode-1')">Assistir no Player Nativo</button>
+    <p>Escolha uma opção abaixo:</p>
+    
+    <button onclick="assistirEpisodio('naruto-episode-1')">1. Tentar Consumet API</button>
+    <button class="btn-teste" onclick="testarPlayer()">2. Testar Player Direto</button>
 
     <script>
+        // Função 1: Tenta puxar da API
         async function assistirEpisodio(episodioId) {
             try {
-                // 1. Busca os dados do episódio na Consumet API (usando Gogoanime como provedor)
-                const resposta = await fetch(`https://api.consumet.org/anime/gogoanime/watch/${episodioId}`);
+                // Adicionamos um proxy de CORS simples na frente da URL para evitar bloqueios do "file://"
+                const urlApi = `https://api.allorigins.win/raw?url=${encodeURIComponent('https://api.consumet.org/anime/gogoanime/watch/' + episodioId)}`;
+                
+                const resposta = await fetch(urlApi);
                 
                 if (!resposta.ok) {
-                    throw new Error('Falha na resposta da API');
+                    throw new Error(`Erro do Servidor HTTP: ${resposta.status}`);
                 }
                 
                 const dados = await resposta.json();
-
-                // 2. Procura a fonte de vídeo principal (.m3u8)
                 const videoPrincipal = dados.sources.find(source => source.quality === 'auto' || source.quality === 'default');
                 
-                if (videoPrincipal && videoPrincipal.url) {
-                    const linkM3U8 = videoPrincipal.url;
-                    
-                    // 3. Verifica se está dentro do Aplicativo Android e envia o link
-                    if (window.AndroidApp) {
-                        window.AndroidApp.abrirPlayerNativo(linkM3U8);
-                    } else {
-                        // Aviso caso você abra o HTML direto no navegador do computador/celular
-                        alert("Você não está no aplicativo Android! Link extraído: " + linkM3U8);
-                        console.log("Link M3U8:", linkM3U8);
-                    }
+                if (videoPrincipal && window.AndroidApp) {
+                    window.AndroidApp.abrirPlayerNativo(videoPrincipal.url);
                 } else {
-                    alert("Não foi possível encontrar o link do vídeo na qualidade automática.");
+                    alert("Vídeo não encontrado no JSON da API.");
                 }
 
             } catch (erro) {
-                alert("Erro ao buscar dados na API. Tente novamente mais tarde.");
-                console.error("Erro detalhado:", erro);
+                // Agora o alerta vai mostrar o MOTIVO exato da falha
+                alert("Falha na API: " + erro.message);
+            }
+        }
+
+        // Função 2: Pula a API e abre um vídeo HLS direto (Big Buck Bunny) para testar o ExoPlayer
+        function testarPlayer() {
+            const linkTeste = "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8";
+            
+            if (window.AndroidApp) {
+                window.AndroidApp.abrirPlayerNativo(linkTeste);
+            } else {
+                alert("Você não está no aplicativo Android!");
             }
         }
     </script>
