@@ -1,0 +1,126 @@
+{
+    "titulo": "GlobalAnimes - Lançamentos Automáticos",
+    "ultima_atualizacao": "20/09/2026 01:06:29",
+    "animes": [
+        {
+            "id": "59193",
+            "nome": "Mushoku Tensei III: Isekai Ittara Honki Dasu",
+            "capa": "https://cdn.myanimelist.net/images/anime/1527/158340.jpg",
+            "episodios": [
+                {
+                    "numero": 1,
+                    "titulo": "Lançamento Recente - Mushoku Tensei III: Isekai Ittara Honki Dasu",
+                    "url": "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
+                }
+            ]
+        },
+        {
+            "id": "49233",
+            "nome": "Youjo Senki II",
+            "capa": "https://cdn.myanimelist.net/images/anime/1917/158371.jpg",
+            "episodios": [
+                {
+                    "numero": 1,
+                    "titulo": "Lançamento Recente - Youjo Senki II",
+                    "url": "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
+                }
+            ]
+        },
+        {
+            "id": "62076",
+            "nome": "Super no Ura de Yani Suu Futari",
+            "capa": "https://cdn.myanimelist.net/images/anime/1768/156339.jpg",
+            "episodios": [
+                {
+                    "numero": 1,
+                    "titulo": "Lançamento Recente - Super no Ura de Yani Suu Futari",
+                    "url": "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
+                }
+            ]
+        },
+        {
+            "id": "60636",
+            "nome": "Bleach: Sennen Kessen-hen - Kashin-tan",
+            "capa": "https://cdn.myanimelist.net/images/anime/1275/158595.jpg",
+            "episodios": [
+                {
+                    "numero": 1,
+                    "titulo": "Lançamento Recente - Bleach: Sennen Kessen-hen - Kashin-tan",
+                    "url": "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
+                }
+            ]
+        },
+        {
+            "id": "54000",
+            "nome": "Otome Game Sekai wa Mob ni Kibishii Sekai desu 2",
+            "capa": "https://cdn.myanimelist.net/images/anime/1285/158337.jpg",
+            "episodios": [
+                {
+                    "numero": 1,
+                    "titulo": "Lançamento Recente - Otome Game Sekai wa Mob ni Kibishii Sekai desu 2",
+                    "url": "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
+                }
+            ]
+        },
+        {
+            "id": "48820",
+            "nome": "Mahou Shoujo Madoka★Magica Movie 4: Walpurgis no Kaiten",
+            "capa": "https://cdn.myanimelist.net/images/anime/1784/151057.jpg",
+            "episodios": [
+                {
+                    "numero": 1,
+                    "titulo": "Lançamento Recente - Mahou Shoujo Madoka★Magica Movie 4: Walpurgis no Kaiten",
+                    "url": "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
+                }
+            ]
+        },
+        {
+            "id": "62542",
+            "nome": "Grand Blue Season 3",
+            "capa": "https://cdn.myanimelist.net/images/anime/1615/158194.jpg",
+            "episodios": [
+                {
+                    "numero": 1,
+                    "titulo": "Lançamento Recente - Grand Blue Season 3",
+                    "url": "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
+                }
+            ]
+        },
+        {
+            "id": "62542",
+            "nome": "Grand Blue Season 3",
+            "capa": "https://cdn.myanimelist.net/images/anime/1615/158194.jpg",
+            "episodios": [
+                {
+                    "numero": 1,
+                    "titulo": "Lançamento Recente - Grand Blue Season 3",
+                    "url": "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
+                }
+            ]
+        },
+        {
+            "id": "63832",
+            "nome": "Seihantai na Kimi to Boku 2nd Season",
+            "capa": "https://cdn.myanimelist.net/images/anime/1143/158409.jpg",
+            "episodios": [
+                {
+                    "numero": 1,
+                    "titulo": "Lançamento Recente - Seihantai na Kimi to Boku 2nd Season",
+                    "url": "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
+                }
+            ]
+        },
+        {
+            "id": "63403",
+            "nome": "Yani Neko",
+            "capa": "https://cdn.myanimelist.net/images/anime/1281/156496.jpg",
+            "episodios": [
+                {
+                    "numero": 1,
+                    "titulo": "Lançamento Recente - Yani Neko",
+                    "url": "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
+                }
+            ]
+        }
+    ]
+}
