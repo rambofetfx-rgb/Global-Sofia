@@ -1,31 +1,33 @@
-name: Atualizar Animes Automaticamente
+name: Gerar APK Automático
 
 on:
+  push:
+    branches: [ "main", "master" ]
   workflow_dispatch:
-  schedule:
-    - cron: '0 */6 * * *' # Roda a cada 6 horas
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
+
     steps:
-      - name: Baixar código do repositório
-        uses: actions/checkout@v3
+    - name: Baixar código do repositório
+      uses: actions/checkout@v3
 
-      - name: Configurar Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
+    - name: Configurar JDK 17
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin'
+        java-version: '17'
 
-      - name: Rodar script de atualização do catálogo
-        run: python atualizar.py
+    - name: Dar permissão de execução ao Gradle
+      run: chmod +x gradlew
 
-      - name: Enviar animes.json atualizado para o GitHub Pages
-        run: |
-          git config --global user.name "Robô do GlobalAnimes"
-          git config --global user.email "robo@github.com"
-          git add animes.json
-          git commit -m "🤖 Atualização automática de episódios via Robô" || exit 0
-          git push
+    - name: Compilar APK Debug
+      run: ./gradlew assembleDebug
+
+    - name: Salvar APK gerado (com retenção mínima de 1 dia)
+      uses: actions/upload-artifact@v3
+      with:
+        name: app-debug-apk
+        path: app/build/outputs/apk/debug/app-debug.apk
+        retention-days: 1
