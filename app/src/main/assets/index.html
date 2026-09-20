@@ -11,47 +11,46 @@
             color: #fff; 
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
             margin: 0; 
-            padding: 16px; 
-            padding-bottom: 60px;
+            padding: 12px; 
+            padding-bottom: 70px;
         }
-        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #222; padding-bottom: 12px; }
-        h1 { color: #ff0055; font-size: 22px; margin: 0 0 4px 0; }
-        #status-atualizacao { color: #aaa; font-size: 11px; margin: 0; }
+        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid #222; padding-bottom: 10px; }
+        h1 { color: #ff0055; font-size: 20px; margin: 0; }
+        #status-contador { color: #888; font-size: 11px; margin: 0; }
         
         .btn-adm { background: #222; color: #ff0055; border: 1px solid #ff0055; padding: 6px 12px; border-radius: 6px; font-size: 12px; cursor: pointer; font-weight: bold; }
         
-        .canal-secao { margin-bottom: 24px; background: #1f1f1f; border-radius: 12px; padding: 14px; border: 1px solid #2b2b2b; }
-        .canal-topo { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
-        .canal-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; background: #333; }
-        .canal-nome { font-size: 16px; font-weight: bold; color: #fff; }
+        /* Estilo YouTube Feed */
+        .canal-secao { margin-bottom: 24px; background: #181818; border-radius: 10px; padding: 12px; border: 1px solid #282828; }
+        .canal-topo { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+        .canal-avatar { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; background: #333; }
+        .canal-nome { font-size: 15px; font-weight: bold; color: #fff; }
         
-        .video-btn { 
-            background-color: #2a2a2a; 
-            color: white; 
-            border: 1px solid #3d3d3d; 
-            padding: 12px; 
-            font-size: 14px; 
-            border-radius: 8px; 
-            cursor: pointer; 
-            margin: 6px 0; 
-            width: 100%; 
-            text-align: left;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .video-btn:active { background-color: #444; }
-        .duracao { font-size: 12px; color: #aaa; background: #111; padding: 2px 6px; border-radius: 4px; }
+        /* Grade de Vídeos (Cards Estilo YouTube) */
+        .videos-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        @media (min-width: 600px) { .videos-grid { grid-template-columns: repeat(3, 1fr); } }
         
-        /* Modal ADM */
-        #modal-adm { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 999; padding: 20px; overflow-y: auto; }
-        .adm-content { background: #1a1a1a; border: 1px solid #ff0055; border-radius: 12px; padding: 20px; max-width: 500px; margin: 40px auto; }
-        .adm-content h2 { color: #ff0055; margin-top: 0; font-size: 18px; }
-        .adm-content textarea { width: 100%; height: 150px; background: #111; color: #0f0; border: 1px solid #333; border-radius: 6px; padding: 10px; font-family: monospace; font-size: 12px; margin-top: 10px; }
-        .adm-content button { background: #ff0055; color: white; border: none; padding: 10px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 10px; width: 100%; }
-        .adm-close { background: #444 !important; margin-top: 6px !important; }
+        .video-card { background: #212121; border-radius: 8px; overflow: hidden; cursor: pointer; border: 1px solid #333; display: flex; flex-direction: column; }
+        .video-thumbnail { width: 100%; height: 95px; background: #111; object-fit: cover; }
+        .video-info { padding: 8px; display: flex; flex-direction: column; justify-content: space-between; flex: 1; }
+        .video-titulo { font-size: 12px; font-weight: 500; color: #eee; margin: 0 0 6px 0; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .video-duracao { font-size: 10px; color: #aaa; background: rgba(0,0,0,0.6); padding: 2px 4px; border-radius: 4px; align-self: flex-start; }
 
-        .carregando { text-align: center; color: #888; margin-top: 40px; font-size: 15px; }
+        /* Modal ADM Completo */
+        #modal-adm { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 999; padding: 16px; overflow-y: auto; }
+        .adm-content { background: #1a1a1a; border: 1px solid #ff0055; border-radius: 12px; padding: 16px; max-width: 500px; margin: 20px auto; }
+        .adm-content h2 { color: #ff0055; margin-top: 0; font-size: 18px; }
+        .adm-content label { font-size: 12px; color: #aaa; display: block; margin-top: 10px; }
+        .adm-content input, .adm-content select { width: 100%; padding: 8px; background: #111; color: #fff; border: 1px solid #333; border-radius: 6px; margin-top: 4px; font-size: 13px; }
+        .adm-content button { background: #ff0055; color: white; border: none; padding: 10px; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 12px; width: 100%; }
+        .btn-secundario { background: #333 !important; margin-top: 6px !important; }
+        .adm-close { background: #444 !important; margin-top: 10px !important; }
+
+        .gerenciar-lista { margin-top: 15px; border-top: 1px solid #333; padding-top: 10px; max-height: 200px; overflow-y: auto; }
+        .item-gerenciar { display: flex; justify-content: space-between; align-items: center; background: #222; padding: 6px 10px; border-radius: 4px; margin-bottom: 6px; font-size: 12px; }
+        .item-gerenciar button { background: #ff4444; width: auto; padding: 4px 8px; margin: 0; font-size: 11px; }
+
+        .vazio { text-align: center; color: #777; margin-top: 30px; font-size: 14px; grid-column: span 2; }
     </style>
 </head>
 <body>
@@ -59,119 +58,184 @@
     <header>
         <div>
             <h1>GlobalSofia</h1>
-            <p id="status-atualizacao">Carregando canais...</p>
+            <p id="status-contador">Seus canais personalizados</p>
         </div>
         <button class="btn-adm" onclick="abrirPainelAdm()">⚙️ ADM</button>
     </header>
     
-    <div id="lista-canais">
-        <div class="carregando">Carregando feed...</div>
-    </div>
+    <div id="lista-canais"></div>
 
-    <!-- Modal do Painel ADM -->
+    <!-- Modal Painel ADM -->
     <div id="modal-adm">
         <div class="adm-content">
             <h2>Painel Administrativo</h2>
-            <p style="font-size: 13px; color: #aaa;">Insira a senha de ADM para gerenciar ou ver o JSON central:</p>
+            
             <div id="adm-login-box">
-                <input type="password" id="senha-adm" placeholder="Senha ADM" style="width: 100%; padding: 10px; background: #111; color: #fff; border: 1px solid #333; border-radius: 6px;">
-                <button onclick="verificarSenha()">Entrar no Painel</button>
+                <label>Digite a Senha de Administrador:</label>
+                <input type="password" id="senha-adm" placeholder="Senha">
+                <button onclick="verificarSenha()">Entrar</button>
             </div>
+
             <div id="adm-painel-box" style="display:none;">
-                <p style="font-size: 12px; color: #0f0;">Acesso Autorizado! Copie a estrutura atualizada para colar no seu GitHub:</p>
-                <textarea id="json-editor" readonly></textarea>
-                <button onclick="copiarJsonAdm()">Copiar JSON para Área de Transferência</button>
+                <h3 style="color: #fff; font-size: 14px; margin-bottom: 6px;">1. Adicionar Novo Canal</h3>
+                <label>Nome do Canal:</label>
+                <input type="text" id="novo-canal-nome" placeholder="Ex: Gameplay Diário">
+                <label>Link do Avatar (Foto do Canal):</label>
+                <input type="text" id="novo-canal-avatar" placeholder="https://exemplo.com/foto.jpg">
+                <button onclick="adicionarCanal()">Salvar Novo Canal</button>
+
+                <h3 style="color: #fff; font-size: 14px; margin-top: 16px; margin-bottom: 6px;">2. Adicionar Vídeo ao Canal</h3>
+                <label>Selecione o Canal:</label>
+                <select id="select-canal-destino"></select>
+                <label>Título do Vídeo:</label>
+                <input type="text" id="novo-video-titulo" placeholder="Ex: Episódio 01 - Gameplay">
+                <label>Link da Miniatura (Capa do Vídeo):</label>
+                <input type="text" id="novo-video-thumb" placeholder="https://exemplo.com/thumb.jpg">
+                <label>Link Direto do Vídeo (.mp4 ou .m3u8):</label>
+                <input type="text" id="novo-video-url" placeholder="https://...">
+                <label>Duração (Ex: 12:40):</label>
+                <input type="text" id="novo-video-duracao" placeholder="10:00">
+                <button onclick="adicionarVideo()">Adicionar Vídeo</button>
+
+                <h3 style="color: #fff; font-size: 14px; margin-top: 16px; margin-bottom: 6px;">Gerenciar / Apagar Canais</h3>
+                <div class="gerenciar-lista" id="lista-gerenciar-canais"></div>
+
+                <button class="btn-secundario" onclick="exportarJsonBackup()">Exportar/Ver Código JSON</button>
             </div>
+
             <button class="adm-close" onclick="fecharPainelAdm()">Fechar</button>
         </div>
     </div>
 
     <script>
-        // Substitua pelo link bruto/público do seu animes.json no GitHub Pages
-        const URL_API_JSON = "https://rambofetfx-rgb.github.io/Global-animes-/animes.json";
-        let cacheDadosGlobais = null;
-
-        async function carregarFeed() {
-            const container = document.getElementById('lista-canais');
-            const statusText = document.getElementById('status-atualizacao');
-            
-            try {
-                const resposta = await fetch(URL_API_JSON + "?t=" + new Date().getTime());
-                if (!resposta.ok) throw new Error("Erro ao carregar dados");
-                
-                const dados = await resposta.json();
-                cacheDadosGlobais = dados;
-                
-                statusText.innerText = dados.titulo || "GlobalSofia";
-                container.innerHTML = '';
-
-                const listaCanais = dados.canais || dados.animes;
-
-                if (!listaCanais || listaCanais.length === 0) {
-                    container.innerHTML = '<div class="carregando">Nenhum canal adicionado ainda.</div>';
-                    return;
+        // Dados Padrão Iniciais (Caso esteja vazio)
+        const dadosPadrao = {
+            "canais": [
+                {
+                    "id": "1",
+                    "nome": "GlobalSofia Destaques",
+                    "avatar": "https://via.placeholder.com/80",
+                    "videos": [
+                        {
+                            "titulo": "Vídeo de Demonstração Oficial",
+                            "thumbnail": "https://via.placeholder.com/320x180",
+                            "url": "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+                            "duracao": "10:35"
+                        }
+                    ]
                 }
+            ]
+        };
 
-                listaCanais.forEach(canal => {
-                    const secao = document.createElement('div');
-                    secao.className = 'canal-secao';
-
-                    const topo = document.createElement('div');
-                    topo.className = 'canal-topo';
-
-                    if (canal.avatar) {
-                        const avatar = document.createElement('img');
-                        avatar.className = 'canal-avatar';
-                        avatar.src = canal.avatar;
-                        topo.appendChild(avatar);
-                    }
-
-                    const nomeCanal = document.createElement('div');
-                    nomeCanal.className = 'canal-nome';
-                    nomeCanal.innerText = canal.nome;
-                    topo.appendChild(nomeCanal);
-
-                    secao.appendChild(topo);
-
-                    const videos = canal.videos || canal.episodios;
-                    if (videos) {
-                        videos.forEach(video => {
-                            const btn = document.createElement('button');
-                            btn.className = 'video-btn';
-                            
-                            const tituloSpan = document.createElement('span');
-                            tituloSpan.innerText = video.titulo;
-                            btn.appendChild(tituloSpan);
-
-                            if (video.duracao) {
-                                const duracaoSpan = document.createElement('span');
-                                duracaoSpan.className = 'duracao';
-                                duracaoSpan.innerText = video.duracao;
-                                btn.appendChild(duracaoSpan);
-                            }
-                            
-                            btn.onclick = () => {
-                                if (window.AndroidApp && typeof window.AndroidApp.abrirPlayerNativo === 'function') {
-                                    window.AndroidApp.abrirPlayerNativo(video.url);
-                                } else {
-                                    window.open(video.url, '_blank');
-                                }
-                            };
-                            
-                            secao.appendChild(btn);
-                        });
-                    }
-
-                    container.appendChild(secao);
-                });
-
-            } catch (erro) {
-                console.error(erro);
-                statusText.innerText = "Modo Offline";
-                container.innerHTML = '<div class="carregando" style="color: #ff5252;">Não foi possível carregar os canais. Verifique a internet.</div>';
+        // Carrega da memória do telemóvel (localStorage)
+        function carregarDadosLocais() {
+            const salvo = localStorage.getItem('globalsofia_dados');
+            if (!salvo) {
+                localStorage.setItem('globalsofia_dados', JSON.stringify(dadosPadrao));
+                return dadosPadrao;
+            }
+            try {
+                return JSON.parse(salvo);
+            } catch (e) {
+                return dadosPadrao;
             }
         }
 
+        function salvarDadosLocais(dados) {
+            localStorage.setItem('globalsofia_dados', JSON.stringify(dados));
+        }
+
+        function renderizarApp() {
+            const dados = carregarDadosLocais();
+            const container = document.getElementById('lista-canais');
+            const contador = document.getElementById('status-contador');
+            container.innerHTML = '';
+
+            const canais = dados.canais || [];
+            contador.innerText = `${canais.length} canal(is) cadastrado(s)`;
+
+            if (canais.length === 0) {
+                container.innerHTML = '<div class="vazio">Nenhum canal cadastrado. Toque em ADM para adicionar.</div>';
+                return;
+            }
+
+            canais.forEach(canal => {
+                const secao = document.createElement('div');
+                secao.className = 'canal-secao';
+
+                // Topo do Canal
+                const topo = document.createElement('div');
+                topo.className = 'canal-topo';
+
+                if (canal.avatar) {
+                    const avatar = document.createElement('img');
+                    avatar.className = 'canal-avatar';
+                    avatar.src = canal.avatar;
+                    topo.appendChild(avatar);
+                }
+
+                const nome = document.createElement('div');
+                nome.className = 'canal-nome';
+                nome.innerText = canal.nome;
+                topo.appendChild(nome);
+
+                secao.appendChild(topo);
+
+                // Grade de Vídeos (Estilo YouTube)
+                const grid = document.createElement('div');
+                grid.className = 'videos-grid';
+
+                const videos = canal.videos || [];
+                if (videos.length === 0) {
+                    grid.innerHTML = '<div class="vazio">Nenhum vídeo neste canal ainda.</div>';
+                } else {
+                    videos.forEach(video => {
+                        const card = document.createElement('div');
+                        card.className = 'video-card';
+
+                        if (video.thumbnail) {
+                            const thumb = document.createElement('img');
+                            thumb.className = 'video-thumbnail';
+                            thumb.src = video.thumbnail;
+                            card.appendChild(thumb);
+                        }
+
+                        const info = document.createElement('div');
+                        info.className = 'video-info';
+
+                        const titulo = document.createElement('div');
+                        titulo.className = 'video-titulo';
+                        titulo.innerText = video.titulo;
+                        info.appendChild(titulo);
+
+                        if (video.duracao) {
+                            const dur = document.createElement('div');
+                            dur.className = 'video-duracao';
+                            dur.innerText = video.duracao;
+                            info.appendChild(dur);
+                        }
+
+                        card.appendChild(info);
+
+                        // Ação ao clicar no vídeo
+                        card.onclick = () => {
+                            if (window.AndroidApp && typeof window.AndroidApp.abrirPlayerNativo === 'function') {
+                                window.AndroidApp.abrirPlayerNativo(video.url);
+                            } else {
+                                window.open(video.url, '_blank');
+                            }
+                        };
+
+                        grid.appendChild(card);
+                    });
+                }
+
+                secao.appendChild(grid);
+                container.appendChild(secao);
+            });
+        }
+
+        // Funções do Painel ADM
         function abrirPainelAdm() {
             document.getElementById('modal-adm').style.display = 'block';
             document.getElementById('adm-login-box').style.display = 'block';
@@ -181,31 +245,119 @@
 
         function fecharPainelAdm() {
             document.getElementById('modal-adm').style.display = 'none';
+            renderizarApp();
         }
 
         function verificarSenha() {
-            const senhaDigitada = document.getElementById('senha-adm').value;
-            // DEFINA SUA SENHA DE ADM AQUI:
-            const SENHA_MESTRA = "sofia2026"; 
-
-            if (senhaDigitada === SENHA_MESTRA) {
+            const senha = document.getElementById('senha-adm').value;
+            if (senha === "sofia2026") {
                 document.getElementById('adm-login-box').style.display = 'none';
                 document.getElementById('adm-painel-box').style.display = 'block';
-                document.getElementById('json-editor').value = JSON.stringify(cacheDadosGlobais, null, 4);
+                atualizarSelectCanais();
+                atualizarListaGerenciar();
             } else {
                 alert("Senha incorreta!");
             }
         }
 
-        function copiarJsonAdm() {
-            const textarea = document.getElementById('json-editor');
-            textarea.select();
-            document.execCommand('copy');
-            alert("JSON copiado! Agora basta colar no seu arquivo do GitHub para atualizar o app de todo mundo.");
+        function adicionarCanal() {
+            const nome = document.getElementById('novo-canal-nome').value.trim();
+            const avatar = document.getElementById('novo-canal-avatar').value.trim();
+
+            if (!nome) {
+                alert("Digite o nome do canal!");
+                return;
+            }
+
+            const dados = carregarDadosLocais();
+            dados.canais.push({
+                id: Date.now().toString(),
+                nome: nome,
+                avatar: avatar,
+                videos: []
+            });
+
+            salvarDadosLocais(dados);
+            alert("Canal adicionado com sucesso!");
+            document.getElementById('novo-canal-nome').value = '';
+            document.getElementById('novo-canal-avatar').value = '';
+            atualizarSelectCanais();
+            atualizarListaGerenciar();
+        }
+
+        function adicionarVideo() {
+            const canalId = document.getElementById('select-canal-destino').value;
+            const titulo = document.getElementById('novo-video-titulo').value.trim();
+            const thumb = document.getElementById('novo-video-thumb').value.trim();
+            const url = document.getElementById('novo-video-url').value.trim();
+            const duracao = document.getElementById('novo-video-duracao').value.trim();
+
+            if (!canalId || !titulo || !url) {
+                alert("Preencha ao menos o canal, o título e o link do vídeo!");
+                return;
+            }
+
+            const dados = carregarDadosLocais();
+            const canal = dados.canais.find(c => c.id === canalId);
+            if (canal) {
+                canal.videos.push({
+                    titulo: titulo,
+                    thumbnail: thumb,
+                    url: url,
+                    duracao: duracao
+                });
+                salvarDadosLocais(dados);
+                alert("Vídeo adicionado com sucesso!");
+                document.getElementById('novo-video-titulo').value = '';
+                document.getElementById('novo-video-thumb').value = '';
+                document.getElementById('novo-video-url').value = '';
+                document.getElementById('novo-video-duracao').value = '';
+            }
+        }
+
+        function atualizarSelectCanais() {
+            const dados = carregarDadosLocais();
+            const select = document.getElementById('select-canal-destino');
+            select.innerHTML = '';
+            dados.canais.forEach(c => {
+                const opt = document.createElement('option');
+                opt.value = c.id;
+                opt.innerText = c.nome;
+                select.appendChild(opt);
+            });
+        }
+
+        function atualizarListaGerenciar() {
+            const dados = carregarDadosLocais();
+            const lista = document.getElementById('lista-gerenciar-canais');
+            lista.innerHTML = '';
+            dados.canais.forEach((c, index) => {
+                const item = document.createElement('div');
+                item.className = 'item-gerenciar';
+                item.innerHTML = `<span>${c.nome}</span>`;
+                
+                const btnDel = document.createElement('button');
+                btnDel.innerText = "Apagar";
+                btnDel.onclick = () => {
+                    if (confirm(`Deseja apagar o canal ${c.nome}?`)) {
+                        dados.canais.splice(index, 1);
+                        salvarDadosLocais(dados);
+                        atualizarSelectCanais();
+                        atualizarListaGerenciar();
+                    }
+                };
+                item.appendChild(btnDel);
+                lista.appendChild(item);
+            });
+        }
+
+        function exportarJsonBackup() {
+            const dados = carregarDadosLocais();
+            prompt("Copie os dados em JSON do seu app:", JSON.stringify(dados));
         }
 
         window.onload = () => {
-            carregarFeed();
+            renderizarApp();
         };
     </script>
 
