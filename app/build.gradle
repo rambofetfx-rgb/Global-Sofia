@@ -1,7 +1,41 @@
-dependencies {
-    // Suas dependências existentes (como appcompat, material, etc)...
+plugins {
+    id 'com.android.application'
+}
 
-    // Bibliotecas do Player Nativo (ExoPlayer)
+android {
+    // Define o pacote base do seu aplicativo
+    namespace 'com.anime.player'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.anime.player"
+        // minSdk 21 (Android 5.0) é o mínimo recomendado para players modernos
+        minSdk 21 
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    // Dependências padrão de interface e compatibilidade do Android
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.10.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+
+    // Bibliotecas do Player Nativo (Media3 / ExoPlayer)
     implementation 'androidx.media3:media3-exoplayer:1.2.0'
     implementation 'androidx.media3:media3-exoplayer-hls:1.2.0'
     implementation 'androidx.media3:media3-ui:1.2.0'
