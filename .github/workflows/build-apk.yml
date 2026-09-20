@@ -1,70 +1,31 @@
-name: Compilar APK Android
+name: Atualizar Animes Automaticamente
 
 on:
-  push:
-    branches: [ "main" ]
+  workflow_dispatch:
+  schedule:
+    - cron: '0 */6 * * *' # Roda a cada 6 horas
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: write
     steps:
-      - name: Checkout do Repositório
-        uses: actions/checkout@v4
+      - name: Baixar código do repositório
+        uses: actions/checkout@v3
 
-      - name: Configurar Java 17
-        uses: actions/setup-java@v4
+      - name: Configurar Python
+        uses: actions/setup-python@v4
         with:
-          distribution: 'temurin'
-          java-version: '17'
+          python-version: '3.10'
 
-      - name: Garantir Estrutura Mínima e AndroidX
+      - name: Rodar script de atualização do catálogo
+        run: python atualizar.py
+
+      - name: Enviar animes.json atualizado para o GitHub Pages
         run: |
-          # Garante Recursos Visuais
-          mkdir -p app/src/main/res/values
-          if [ ! -f app/src/main/res/values/strings.xml ]; then echo '<resources><string name="app_name">GlobalAnimes</string></resources>' > app/src/main/res/values/strings.xml; fi
-          if [ ! -f app/src/main/res/values/colors.xml ]; then echo '<resources><color name="colorPrimary">#00b4d8</color></resources>' > app/src/main/res/values/colors.xml; fi
-          if [ ! -f app/src/main/res/values/styles.xml ]; then echo '<resources><style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar"/></resources>' > app/src/main/res/values/styles.xml; fi
-          
-          # Garante o Manifest
-          if [ ! -f app/src/main/AndroidManifest.xml ]; then
-            echo '<?xml version="1.0" encoding="utf-8"?><manifest xmlns:android="http://schemas.android.com/apk/res/android"><application android:allowBackup="true" android:label="@string/app_name" android:theme="@style/AppTheme"></application></manifest>' > app/src/main/AndroidManifest.xml
-          fi
-
-          # Habilita o AndroidX no gradle.properties
-          echo "android.useAndroidX=true" >> gradle.properties
-          echo "android.enableJetifier=true" >> gradle.properties
-
-          if [ -f "./gradlew" ]; then chmod +x gradlew; fi
-
-      - name: Configurar Gradle
-        uses: gradle/actions/setup-gradle@v4
-        with:
-          gradle-version: '8.5'
-          cache-disabled: true
-
-      - name: Compilar APK (Filtro para Mobile)
-        run: |
-          # Executa o build silenciosamente. Se falhar, captura apenas a causa do erro.
-          if [ -f "./gradlew" ]; then
-            ./gradlew clean assembleDebug > build_log.txt 2>&1 || FAILED=true
-          else
-            gradle clean assembleDebug > build_log.txt 2>&1 || FAILED=true
-          fi
-          
-          if [ "$FAILED" = "true" ]; then
-            echo "❌ FALHA NA COMPILAÇÃO. Resumo do Erro:"
-            echo "----------------------------------------"
-            grep -B 3 -A 15 "FAILED" build_log.txt || tail -n 25 build_log.txt
-            echo "----------------------------------------"
-            exit 1
-          else
-            echo "✅ Compilação concluída com sucesso!"
-          fi
-
-      - name: Disponibilizar APK para Descarregar
-        uses: actions/upload-artifact@v4
-        with:
-          name: GlobalAnimes-APK
-          path: app/build/outputs/apk/debug/app-debug.apk
-          retention-days: 1
+          git config --global user.name "Robô do GlobalAnimes"
+          git config --global user.email "robo@github.com"
+          git add animes.json
+          git commit -m "🤖 Atualização automática de episódios via Robô" || exit 0
+          git push
