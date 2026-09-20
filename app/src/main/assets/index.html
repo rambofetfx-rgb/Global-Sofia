@@ -3,61 +3,128 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catálogo GlobalAnimes</title>
+    <title>GlobalAnimes Mobile</title>
     <style>
-        body { background-color: #121212; color: #fff; font-family: sans-serif; text-align: center; padding: 50px; margin: 0; }
-        h1 { font-size: 24px; margin-bottom: 10px; }
-        p { color: #b3b3b3; margin-bottom: 30px; }
-        button { background-color: #e50914; color: white; border: none; padding: 15px 30px; font-size: 16px; border-radius: 5px; cursor: pointer; margin: 10px; width: 80%; max-width: 300px;}
-        .btn-teste { background-color: #007bff; }
+        * { box-sizing: border-box; }
+        body { 
+            background-color: #121212; 
+            color: #fff; 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+            margin: 0; 
+            padding: 16px; 
+        }
+        header { text-align: center; margin-bottom: 20px; }
+        h1 { color: #e50914; font-size: 24px; margin: 0 0 6px 0; }
+        #status-atualizacao { color: #888; font-size: 12px; margin: 0 0 12px 0; }
+        
+        .btn-atualizar {
+            background-color: #e50914;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            font-size: 13px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .btn-atualizar:active { background-color: #b20710; }
+
+        .anime-secao { margin-bottom: 24px; background: #1a1a1a; border-radius: 12px; padding: 14px; border: 1px solid #262626; }
+        .anime-titulo { font-size: 18px; font-weight: bold; margin-bottom: 12px; color: #ff5252; border-left: 4px solid #e50914; padding-left: 8px; }
+        
+        .episodio-btn { 
+            background-color: #262626; 
+            color: white; 
+            border: 1px solid #333; 
+            padding: 14px; 
+            font-size: 15px; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            margin: 8px 0; 
+            width: 100%; 
+            text-align: left;
+        }
+        .episodio-btn:active { background-color: #383838; }
+        
+        .carregando { text-align: center; color: #b3b3b3; margin-top: 40px; font-size: 16px; }
     </style>
 </head>
 <body>
 
-    <h1>Naruto - Episódio 1</h1>
-    <p>Escolha uma opção abaixo:</p>
+    <header>
+        <h1>GlobalAnimes</h1>
+        <p id="status-atualizacao">Verificando atualizações...</p>
+        <button class="btn-atualizar" onclick="carregarCatalogoOnline()">🔄 Atualizar Lista</button>
+    </header>
     
-    <button onclick="assistirEpisodio('naruto-episode-1')">1. Tentar Consumet API</button>
-    <button class="btn-teste" onclick="testarPlayer()">2. Testar Player Direto</button>
+    <div id="lista-animes">
+        <div class="carregando">Carregando episódios recentes...</div>
+    </div>
 
     <script>
-        // Função 1: Tenta puxar da API
-        async function assistirEpisodio(episodioId) {
+        // Link direto do seu GitHub Pages
+        const URL_API_JSON = "https://rambofetfx-rgb.github.io/Global-animes-/animes.json";
+
+        async function carregarCatalogoOnline() {
+            const container = document.getElementById('lista-animes');
+            const statusText = document.getElementById('status-atualizacao');
+            
+            statusText.innerText = "Buscando novos lançamentos...";
+
             try {
-                // Adicionamos um proxy de CORS simples na frente da URL para evitar bloqueios do "file://"
-                const urlApi = `https://api.allorigins.win/raw?url=${encodeURIComponent('https://api.consumet.org/anime/gogoanime/watch/' + episodioId)}`;
-                
-                const resposta = await fetch(urlApi);
-                
-                if (!resposta.ok) {
-                    throw new Error(`Erro do Servidor HTTP: ${resposta.status}`);
-                }
+                // Adiciona o parâmetro de tempo para forçar o app a baixar o arquivo novo (sem cache antigo)
+                const resposta = await fetch(URL_API_JSON + "?t=" + new Date().getTime());
+                if (!resposta.ok) throw new Error("Erro ao baixar dados da nuvem");
                 
                 const dados = await resposta.json();
-                const videoPrincipal = dados.sources.find(source => source.quality === 'auto' || source.quality === 'default');
                 
-                if (videoPrincipal && window.AndroidApp) {
-                    window.AndroidApp.abrirPlayerNativo(videoPrincipal.url);
-                } else {
-                    alert("Vídeo não encontrado no JSON da API.");
+                statusText.innerText = "Última sincronização: " + (dados.ultima_atualizacao || "Agora");
+                container.innerHTML = '';
+
+                if (!dados.animes || dados.animes.length === 0) {
+                    container.innerHTML = '<div class="carregando">Nenhum anime encontrado no momento.</div>';
+                    return;
                 }
 
+                dados.animes.forEach(anime => {
+                    const secao = document.createElement('div');
+                    secao.className = 'anime-secao';
+
+                    const tituloAnime = document.createElement('div');
+                    tituloAnime.className = 'anime-titulo';
+                    tituloAnime.innerText = anime.nome;
+                    secao.appendChild(tituloAnime);
+
+                    anime.episodios.forEach(ep => {
+                        const btn = document.createElement('button');
+                        btn.className = 'episodio-btn';
+                        btn.innerText = ep.titulo;
+                        
+                        btn.onclick = () => {
+                            if (window.AndroidApp && typeof window.AndroidApp.abrirPlayerNativo === 'function') {
+                                window.AndroidApp.abrirPlayerNativo(ep.url);
+                            } else {
+                                window.open(ep.url, '_blank');
+                            }
+                        };
+                        
+                        secao.appendChild(btn);
+                    });
+
+                    container.appendChild(secao);
+                });
+
             } catch (erro) {
-                // Agora o alerta vai mostrar o MOTIVO exato da falha
-                alert("Falha na API: " + erro.message);
+                console.error(erro);
+                statusText.innerText = "Modo Offline / Sem Conexão";
+                container.innerHTML = '<div class="carregando" style="color: #ff5252;">Não foi possível carregar os novos episódios. Verifique sua internet.</div>';
             }
         }
 
-        // Função 2: Pula a API e abre um vídeo HLS direto (Big Buck Bunny) para testar o ExoPlayer
-        function testarPlayer() {
-            const linkTeste = "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8";
-            
-            if (window.AndroidApp) {
-                window.AndroidApp.abrirPlayerNativo(linkTeste);
-            } else {
-                alert("Você não está no aplicativo Android!");
-            }
-        }
+        // Executa automaticamente ASSIM QUE O APP É ABERTO
+        window.onload = () => {
+            carregarCatalogoOnline();
+        };
     </script>
 
 </body>
