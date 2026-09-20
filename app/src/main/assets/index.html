@@ -3,127 +3,209 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GlobalAnimes Mobile</title>
+    <title>GlobalSofia</title>
     <style>
         * { box-sizing: border-box; }
         body { 
-            background-color: #121212; 
+            background-color: #0f0f0f; 
             color: #fff; 
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
             margin: 0; 
             padding: 16px; 
+            padding-bottom: 60px;
         }
-        header { text-align: center; margin-bottom: 20px; }
-        h1 { color: #e50914; font-size: 24px; margin: 0 0 6px 0; }
-        #status-atualizacao { color: #888; font-size: 12px; margin: 0 0 12px 0; }
+        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #222; padding-bottom: 12px; }
+        h1 { color: #ff0055; font-size: 22px; margin: 0 0 4px 0; }
+        #status-atualizacao { color: #aaa; font-size: 11px; margin: 0; }
         
-        .btn-atualizar {
-            background-color: #e50914;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            font-size: 13px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        .btn-atualizar:active { background-color: #b20710; }
-
-        .anime-secao { margin-bottom: 24px; background: #1a1a1a; border-radius: 12px; padding: 14px; border: 1px solid #262626; }
-        .anime-titulo { font-size: 18px; font-weight: bold; margin-bottom: 12px; color: #ff5252; border-left: 4px solid #e50914; padding-left: 8px; }
+        .btn-adm { background: #222; color: #ff0055; border: 1px solid #ff0055; padding: 6px 12px; border-radius: 6px; font-size: 12px; cursor: pointer; font-weight: bold; }
         
-        .episodio-btn { 
-            background-color: #262626; 
+        .canal-secao { margin-bottom: 24px; background: #1f1f1f; border-radius: 12px; padding: 14px; border: 1px solid #2b2b2b; }
+        .canal-topo { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+        .canal-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; background: #333; }
+        .canal-nome { font-size: 16px; font-weight: bold; color: #fff; }
+        
+        .video-btn { 
+            background-color: #2a2a2a; 
             color: white; 
-            border: 1px solid #333; 
-            padding: 14px; 
-            font-size: 15px; 
+            border: 1px solid #3d3d3d; 
+            padding: 12px; 
+            font-size: 14px; 
             border-radius: 8px; 
             cursor: pointer; 
-            margin: 8px 0; 
+            margin: 6px 0; 
             width: 100%; 
             text-align: left;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        .episodio-btn:active { background-color: #383838; }
+        .video-btn:active { background-color: #444; }
+        .duracao { font-size: 12px; color: #aaa; background: #111; padding: 2px 6px; border-radius: 4px; }
         
-        .carregando { text-align: center; color: #b3b3b3; margin-top: 40px; font-size: 16px; }
+        /* Modal ADM */
+        #modal-adm { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 999; padding: 20px; overflow-y: auto; }
+        .adm-content { background: #1a1a1a; border: 1px solid #ff0055; border-radius: 12px; padding: 20px; max-width: 500px; margin: 40px auto; }
+        .adm-content h2 { color: #ff0055; margin-top: 0; font-size: 18px; }
+        .adm-content textarea { width: 100%; height: 150px; background: #111; color: #0f0; border: 1px solid #333; border-radius: 6px; padding: 10px; font-family: monospace; font-size: 12px; margin-top: 10px; }
+        .adm-content button { background: #ff0055; color: white; border: none; padding: 10px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 10px; width: 100%; }
+        .adm-close { background: #444 !important; margin-top: 6px !important; }
+
+        .carregando { text-align: center; color: #888; margin-top: 40px; font-size: 15px; }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>GlobalAnimes</h1>
-        <p id="status-atualizacao">Verificando atualizações...</p>
-        <button class="btn-atualizar" onclick="carregarCatalogoOnline()">🔄 Atualizar Lista</button>
+        <div>
+            <h1>GlobalSofia</h1>
+            <p id="status-atualizacao">Carregando canais...</p>
+        </div>
+        <button class="btn-adm" onclick="abrirPainelAdm()">⚙️ ADM</button>
     </header>
     
-    <div id="lista-animes">
-        <div class="carregando">Carregando episódios recentes...</div>
+    <div id="lista-canais">
+        <div class="carregando">Carregando feed...</div>
+    </div>
+
+    <!-- Modal do Painel ADM -->
+    <div id="modal-adm">
+        <div class="adm-content">
+            <h2>Painel Administrativo</h2>
+            <p style="font-size: 13px; color: #aaa;">Insira a senha de ADM para gerenciar ou ver o JSON central:</p>
+            <div id="adm-login-box">
+                <input type="password" id="senha-adm" placeholder="Senha ADM" style="width: 100%; padding: 10px; background: #111; color: #fff; border: 1px solid #333; border-radius: 6px;">
+                <button onclick="verificarSenha()">Entrar no Painel</button>
+            </div>
+            <div id="adm-painel-box" style="display:none;">
+                <p style="font-size: 12px; color: #0f0;">Acesso Autorizado! Copie a estrutura atualizada para colar no seu GitHub:</p>
+                <textarea id="json-editor" readonly></textarea>
+                <button onclick="copiarJsonAdm()">Copiar JSON para Área de Transferência</button>
+            </div>
+            <button class="adm-close" onclick="fecharPainelAdm()">Fechar</button>
+        </div>
     </div>
 
     <script>
-        // Link direto do seu GitHub Pages
+        // Substitua pelo link bruto/público do seu animes.json no GitHub Pages
         const URL_API_JSON = "https://rambofetfx-rgb.github.io/Global-animes-/animes.json";
+        let cacheDadosGlobais = null;
 
-        async function carregarCatalogoOnline() {
-            const container = document.getElementById('lista-animes');
+        async function carregarFeed() {
+            const container = document.getElementById('lista-canais');
             const statusText = document.getElementById('status-atualizacao');
             
-            statusText.innerText = "Buscando novos lançamentos...";
-
             try {
-                // Adiciona o parâmetro de tempo para forçar o app a baixar o arquivo novo (sem cache antigo)
                 const resposta = await fetch(URL_API_JSON + "?t=" + new Date().getTime());
-                if (!resposta.ok) throw new Error("Erro ao baixar dados da nuvem");
+                if (!resposta.ok) throw new Error("Erro ao carregar dados");
                 
                 const dados = await resposta.json();
+                cacheDadosGlobais = dados;
                 
-                statusText.innerText = "Última sincronização: " + (dados.ultima_atualizacao || "Agora");
+                statusText.innerText = dados.titulo || "GlobalSofia";
                 container.innerHTML = '';
 
-                if (!dados.animes || dados.animes.length === 0) {
-                    container.innerHTML = '<div class="carregando">Nenhum anime encontrado no momento.</div>';
+                const listaCanais = dados.canais || dados.animes;
+
+                if (!listaCanais || listaCanais.length === 0) {
+                    container.innerHTML = '<div class="carregando">Nenhum canal adicionado ainda.</div>';
                     return;
                 }
 
-                dados.animes.forEach(anime => {
+                listaCanais.forEach(canal => {
                     const secao = document.createElement('div');
-                    secao.className = 'anime-secao';
+                    secao.className = 'canal-secao';
 
-                    const tituloAnime = document.createElement('div');
-                    tituloAnime.className = 'anime-titulo';
-                    tituloAnime.innerText = anime.nome;
-                    secao.appendChild(tituloAnime);
+                    const topo = document.createElement('div');
+                    topo.className = 'canal-topo';
 
-                    anime.episodios.forEach(ep => {
-                        const btn = document.createElement('button');
-                        btn.className = 'episodio-btn';
-                        btn.innerText = ep.titulo;
-                        
-                        btn.onclick = () => {
-                            if (window.AndroidApp && typeof window.AndroidApp.abrirPlayerNativo === 'function') {
-                                window.AndroidApp.abrirPlayerNativo(ep.url);
-                            } else {
-                                window.open(ep.url, '_blank');
+                    if (canal.avatar) {
+                        const avatar = document.createElement('img');
+                        avatar.className = 'canal-avatar';
+                        avatar.src = canal.avatar;
+                        topo.appendChild(avatar);
+                    }
+
+                    const nomeCanal = document.createElement('div');
+                    nomeCanal.className = 'canal-nome';
+                    nomeCanal.innerText = canal.nome;
+                    topo.appendChild(nomeCanal);
+
+                    secao.appendChild(topo);
+
+                    const videos = canal.videos || canal.episodios;
+                    if (videos) {
+                        videos.forEach(video => {
+                            const btn = document.createElement('button');
+                            btn.className = 'video-btn';
+                            
+                            const tituloSpan = document.createElement('span');
+                            tituloSpan.innerText = video.titulo;
+                            btn.appendChild(tituloSpan);
+
+                            if (video.duracao) {
+                                const duracaoSpan = document.createElement('span');
+                                duracaoSpan.className = 'duracao';
+                                duracaoSpan.innerText = video.duracao;
+                                btn.appendChild(duracaoSpan);
                             }
-                        };
-                        
-                        secao.appendChild(btn);
-                    });
+                            
+                            btn.onclick = () => {
+                                if (window.AndroidApp && typeof window.AndroidApp.abrirPlayerNativo === 'function') {
+                                    window.AndroidApp.abrirPlayerNativo(video.url);
+                                } else {
+                                    window.open(video.url, '_blank');
+                                }
+                            };
+                            
+                            secao.appendChild(btn);
+                        });
+                    }
 
                     container.appendChild(secao);
                 });
 
             } catch (erro) {
                 console.error(erro);
-                statusText.innerText = "Modo Offline / Sem Conexão";
-                container.innerHTML = '<div class="carregando" style="color: #ff5252;">Não foi possível carregar os novos episódios. Verifique sua internet.</div>';
+                statusText.innerText = "Modo Offline";
+                container.innerHTML = '<div class="carregando" style="color: #ff5252;">Não foi possível carregar os canais. Verifique a internet.</div>';
             }
         }
 
-        // Executa automaticamente ASSIM QUE O APP É ABERTO
+        function abrirPainelAdm() {
+            document.getElementById('modal-adm').style.display = 'block';
+            document.getElementById('adm-login-box').style.display = 'block';
+            document.getElementById('adm-painel-box').style.display = 'none';
+            document.getElementById('senha-adm').value = '';
+        }
+
+        function fecharPainelAdm() {
+            document.getElementById('modal-adm').style.display = 'none';
+        }
+
+        function verificarSenha() {
+            const senhaDigitada = document.getElementById('senha-adm').value;
+            // DEFINA SUA SENHA DE ADM AQUI:
+            const SENHA_MESTRA = "sofia2026"; 
+
+            if (senhaDigitada === SENHA_MESTRA) {
+                document.getElementById('adm-login-box').style.display = 'none';
+                document.getElementById('adm-painel-box').style.display = 'block';
+                document.getElementById('json-editor').value = JSON.stringify(cacheDadosGlobais, null, 4);
+            } else {
+                alert("Senha incorreta!");
+            }
+        }
+
+        function copiarJsonAdm() {
+            const textarea = document.getElementById('json-editor');
+            textarea.select();
+            document.execCommand('copy');
+            alert("JSON copiado! Agora basta colar no seu arquivo do GitHub para atualizar o app de todo mundo.");
+        }
+
         window.onload = () => {
-            carregarCatalogoOnline();
+            carregarFeed();
         };
     </script>
 
