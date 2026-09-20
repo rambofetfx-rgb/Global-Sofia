@@ -1,0 +1,31 @@
+name: Atualizar Animes Automaticamente
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 */6 * * *' # Roda a cada 6 horas
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Baixar código do repositório
+        uses: actions/checkout@v3
+
+      - name: Configurar Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Rodar script de atualização do catálogo
+        run: python atualizar.py
+
+      - name: Enviar animes.json atualizado para o GitHub Pages
+        run: |
+          git config --global user.name "Robô do GlobalAnimes"
+          git config --global user.email "robo@github.com"
+          git add animes.json
+          git commit -m "🤖 Atualização automática de episódios via Robô" || exit 0
+          git push
